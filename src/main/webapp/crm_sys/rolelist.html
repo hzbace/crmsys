@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>客户开发计划</title>
+<link href="../css/stylesheet.css" rel="stylesheet" type="text/css" />
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/javascript.js"></script>
+<script type="text/javascript" src="../js/jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="../js/jquery.pagination.js"></script>
+</head>
+
+<body>
+<div style="padding:5px;">
+  <div class="txt" style="padding-top:3px;" >当前位置：系统管理&nbsp;&gt;&nbsp;客户角色信息&nbsp;&gt;&nbsp;
+    <hr class="hr1" />
+  </div>
+  <div class="operation_button">
+  	<a href="#" title="" onclick="to('roleadd.html')" target="rightFrame">增加</a>
+  	<a href="#" title="返回" onclick="back()">返回</a>
+    <a href="#" title="保存" onclick="save('新建联系人','linkman.html')">保存</a>
+  </div>
+  <table  border="0" cellpadding="0" cellspacing="0" class="table_show txt">
+        <tr>
+          <td width="100" align="center">用户编号：</td>
+          <td width="200">KH071202001</td>
+          <td width="100" align="center">客户名称：</td>
+          <td width="200">角色名称</td>
+        </tr>
+  </table>
+  <div class="out_bg">
+    <div class="in_bg">
+      <table id="tid" border="0" cellpadding="0" cellspacing="0" class="table_input txt">
+        <tr>
+          <td width="100">序号</td>
+          <td width="100">角色名称</td>
+          <td width="100">角色描述</td>
+          <td width="100">状态</td>
+          <td width="100">操作</td>
+        </tr>
+        <tbody id="contentInfo">
+        
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div class="wrapper">
+	<div class="eg"></div>
+	<div class="M-box"></div>
+	<div class="tips">当前是第<span class="now">1</span>页,总共<span class="total"></span>页,总共<span class="count"></span>条数据</div>
+	
+	我到底在哪里
+	
+	</div>
+  
+</div>
+
+
+<script type="text/javascript">
+
+
+	var totalPage = 1; 
+	var totalRecords = 1;
+	var pageSize = 4;
+	
+	
+	$(function(){
+		
+		loadList(1);
+	});
+	
+	 function loadList(pno)  
+     {  
+     $.ajax({  
+         type:"post",  
+         url:"/crm/pageRole.do",  
+         dataType: "json",  
+         data: { 'page': pno,'pageSize': pageSize},  
+         success:function(data) {  
+             if (data.code == 1) {  
+            	
+					var count = data.info.total; //总条数
+					var roles = data.info.rows;//当前页总条数
+					totalRecords = count;
+					totalPage = Math.ceil(count / pageSize);  
+					
+					$('.total').text(totalPage);
+                    $('.count').text(count);
+                    
+					$("#contentInfo").empty();
+					$(roles).each(function(){
+						var html = '<tr>';
+					    html += '<td width="100">'+ this.roleId +'</td>';
+					    html += '   <td width="100">'+ this.roleName +'</td>';
+					    html += '   <td width="100">'+ this.roleDesc +'</td>';
+					   	 if(this.roleFlag == 0){
+					    	html += '  <td width="100">未删</td>';
+					  	 	html +=	'<td width="100"><img title="编辑" src="../images/hammer_screwdriver.png" class="op_button" onclick="roleupdate('+ this.roleId +')" />&nbsp;&nbsp;&nbsp;<button onclick="deletebt('+ this.roleId +')">删除</button></td>';
+					    }else{
+					    	html += '  <td width="100">已删</td>';
+					    }
+					   	
+					    html += '</tr>';
+					    
+					    $("#contentInfo").append($(html));
+					});
+					
+					
+                     
+                     $(".M-box").pagination({  
+                         pageCount: totalPage,  // 总页数
+                         current:pno,//当前第几页  
+                         jump: true,  // 是否显示跳转相关元素
+                         jumpBtn: 'go', // 跳转按钮显示文字
+                         coping: true,    //是否显示首页末页
+                         homePage: '首页',  
+                         endPage: '末页',  
+                         prevContent: '<<',  // 上一页功能 显示文字信息
+                         nextContent: '>>',  
+                         callback:function(index){  
+                             $(".now").text(index.getCurrent());   
+                             loadList(index.getCurrent());//获取当前页  
+                        } 
+                     });  
+				}
+			},
+			error:function(data){
+				alert("ajax运行错误");
+			}
+		})
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	$(function(){
+		$.ajax({
+			type:"get",
+			url:"/crm/roleList.do",
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					var userlist = data.info;
+					$(userlist).each(function(){
+						var html = '<tr>';
+					    html += '<td width="100">'+ this.roleId +'</td>';
+					    html += '   <td width="100">'+ this.roleName +'</td>';
+					    html += '   <td width="100">'+ this.roleDesc +'</td>';
+					   	 if(this.roleFlag == 0){
+					    	html += '  <td width="100">未删</td>';
+					  	 	html +=	'<td width="100"><img title="编辑" src="../images/hammer_screwdriver.png" class="op_button" onclick="roleupdate('+ this.roleId +')" />&nbsp;&nbsp;&nbsp;<button onclick="deletebt('+ this.roleId +')">删除</button></td>';
+					    }else{
+					    	html += '  <td width="100">已删</td>';
+					    }
+					   	
+					    html += '</tr>';
+					    
+					    $("#tid").append($(html));
+					        
+					})
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax运行错误");
+			}
+			
+		})
+	})*/
+</script>
+	
+<script type="text/javascript">	
+	
+	function deletebt(id){
+		$.ajax({
+			type:"get",
+			url:"/crm/deleteRole.do?id=" + id,
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					window.location.href = "rolelist.html";
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax运行错误");
+			}
+		})
+	}
+</script>
+
+
+<script type="text/javascript">
+	function roleupdate(id){
+		window.location.href = "roleupdate.html?id=" + id;
+	}
+
+</script>
+</body>
+</html>

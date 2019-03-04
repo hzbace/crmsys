@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.dao.OrderLineMapper">
+	
+	<resultMap type="com.qianfeng.vo.OrderLine" id="BaseResultMap">
+		<id property="olId" column="odd_id"></id>
+		<result column="odd_count" property="olCount"/>
+		<result column="odd_unit" property="olUnit"/>
+		<association property="order" resultMap="com.qianfeng.dao.OrderMapper.BaseResultMap"></association>
+		<association property="product" resultMap="com.qianfeng.dao.ProductMapper.BaseResultMap"></association>
+	</resultMap>
+
+
+	<select id="findAllOrderLine" resultMap="BaseResultMap">
+		select * from product p
+		inner join orders_line ol
+		on ol.odd_prod_id=p.prod_id
+		INNER JOIN orders o
+		on ol.odd_order_id=o.odr_id
+	</select>
+	
+	<delete id="deleteOrderLine" parameterType="int">
+		delete * from orders_line where odd_id=#{olId}
+	</delete>
+	
+</mapper>

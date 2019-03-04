@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../js/jquery-1.12.2.min.js"></script>
+</head>
+<body>
+<form onsubmit="return false">
+角色名称<input type="text" name="roleName"><br/> 
+角色描述<input type="text" name="roleDesc"><br/> 
+<input type="hidden" name="roleId"/>
+<input type="submit" value="更改">
+</form>
+<script type="text/javascript">
+//var info = window.location.search;
+//var index = info.indexOf("=", 0);
+//var id = info.substring(index + 1);
+$("form").submit(function(){
+	
+	$.ajax({
+		type:"get",
+		url:"/crm/updateRole.do",
+		data:$("form").serialize(),
+		dataType:"json",
+		success:function(data){
+			if(data.code == 1){
+				window.location.href="rolelist.html";
+				
+			}else{
+				alert(data.info);
+			}
+		}
+	})
+})
+
+
+</script>
+
+
+<script type="text/javascript">
+	var info = window.location.search;
+	$(function(){
+		$.ajax({
+			type:"get",
+			url:"/crm/findRole.do" + info,
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					var role = data.info;
+					$("input[name='roleName']").val(role.roleName);
+					$("input[name='roleDesc']").val(role.roleDesc);
+					$("input[name='roleId']").val(role.roleId);
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax运行错误");
+			}
+		})
+	})
+
+
+</script>
+</body>
+</html>

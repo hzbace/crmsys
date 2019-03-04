@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+</head>
+<body>
+
+<form action="" onsubmit="return false">
+	用户名<input type="text" name="name" /><br/>
+	密码<input type="password" name="password" /><br/>
+	<input type="submit" value="登录" />
+</form>
+
+
+<script type="text/javascript">
+
+$("form").validate({
+	submitHandler:function(){
+		$.ajax({
+			type:"post",
+			url:"/crm/login.do",
+			data:$("form").serialize(),
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					window.location.href="index.html";
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax运行错误");
+			}
+			
+		})
+	},
+	rules:{
+		name:"required",
+		password:{
+			required:true,
+			minlength:5
+		}
+		
+	},
+	messages:{
+		name:"用户名不能为空",
+		password:{
+			required:"密码不能为空",
+			minlength:"密码长度不能少于5位"
+		}
+	}
+})
+
+
+</script>
+</body>
+</html>

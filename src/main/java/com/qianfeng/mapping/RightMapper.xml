@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.dao.RightMapper">
+  <resultMap id="BaseResultMap" type="com.qianfeng.pojo.Right">
+    <id column="right_id" jdbcType="INTEGER" property="rightId" />
+    <result column="right_parent_id" jdbcType="INTEGER" property="rightParentId" />
+    <result column="right_name" jdbcType="VARCHAR" property="rightName" />
+    <result column="right_url" jdbcType="VARCHAR" property="rightUrl" />
+    <result column="right_flag" jdbcType="CHAR" property="rightFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    right_id, right_parent_id, right_name, right_url, right_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_right
+    where right_id = #{rightId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_right
+    where right_id = #{rightId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.qianfeng.pojo.Right">
+    insert into sys_right (right_id, right_parent_id, right_name, 
+      right_url, right_flag)
+    values (#{rightId,jdbcType=INTEGER}, #{rightParentId,jdbcType=INTEGER}, #{rightName,jdbcType=VARCHAR}, 
+      #{rightUrl,jdbcType=VARCHAR}, #{rightFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qianfeng.pojo.Right">
+    insert into sys_right
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rightId != null">
+        right_id,
+      </if>
+      <if test="rightParentId != null">
+        right_parent_id,
+      </if>
+      <if test="rightName != null">
+        right_name,
+      </if>
+      <if test="rightUrl != null">
+        right_url,
+      </if>
+      <if test="rightFlag != null">
+        right_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rightId != null">
+        #{rightId,jdbcType=INTEGER},
+      </if>
+      <if test="rightParentId != null">
+        #{rightParentId,jdbcType=INTEGER},
+      </if>
+      <if test="rightName != null">
+        #{rightName,jdbcType=VARCHAR},
+      </if>
+      <if test="rightUrl != null">
+        #{rightUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="rightFlag != null">
+        #{rightFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qianfeng.pojo.Right">
+    update sys_right
+    <set>
+      <if test="rightParentId != null">
+        right_parent_id = #{rightParentId,jdbcType=INTEGER},
+      </if>
+      <if test="rightName != null">
+        right_name = #{rightName,jdbcType=VARCHAR},
+      </if>
+      <if test="rightUrl != null">
+        right_url = #{rightUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="rightFlag != null">
+        right_flag = #{rightFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where right_id = #{rightId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qianfeng.pojo.Right">
+    update sys_right
+    set right_parent_id = #{rightParentId,jdbcType=INTEGER},
+      right_name = #{rightName,jdbcType=VARCHAR},
+      right_url = #{rightUrl,jdbcType=VARCHAR},
+      right_flag = #{rightFlag,jdbcType=CHAR}
+    where right_id = #{rightId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAllByRoleId" parameterType="int" resultMap="BaseResultMap">
+  	select sr.right_id,sr.right_name,sr.right_parent_id,sr.right_url from sys_user u
+	inner join sys_role_right rr
+	on u.user_role_id= rr.rf_role_id
+	INNER join sys_right sr
+	on rr.rf_right_id = sr.right_id
+	where rr.rf_role_id =#{roleId} and sr.right_flag=0
+  </select>
+  
+  <select id="findAllRight" resultMap="BaseResultMap">
+  	select * from sys_right
+  </select>
+  <update id="deleteRight" parameterType="int">
+  	update sys_right set right_flag=1 where right_id=#{id}
+  	
+  </update>
+  <select id="findByRoleId" parameterType="int" resultMap="BaseResultMap">
+  	select sr.* from sys_right sr
+	inner JOIN sys_role_right rr
+	on sr.right_id=rr.rf_right_id
+	where rr.rf_role_id=#{rf_role_id}
+  </select>
+  
+</mapper>

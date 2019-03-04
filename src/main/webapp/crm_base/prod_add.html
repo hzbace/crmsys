@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>基础数据</title>
+<link href="../css/stylesheet.css" rel="stylesheet" type="text/css" />
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/javascript.js"></script>
+<script type="text/javascript" src="../js/jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+</head>
+
+<body>
+<div style="padding:5px;">
+  <div class="txt" style="padding-top:3px;" >当前位置：基础数据&nbsp;&gt;&nbsp;查询产品信息&nbsp;&gt;&nbsp;添加商品信息<!-- &nbsp;&gt;&nbsp;<a href="dict.html">数据字典列表</a>&nbsp;&gt;&nbsp;新建数据字典 -->
+    <hr class="hr1" />
+  </div>
+  <div class="operation_button">
+  	<a href="#" title="返回" onclick="back()">返回</a>
+    <!-- <a href="#" title="保存" onclick="save()">保存</a> -->
+  </div>
+  <div class="out_bg">
+    <div class="in_bg">
+    <form onsubmit="return false">
+      <table border="0" cellpadding="0" cellspacing="0" class="table_input txt">
+        <tr>
+          <td width="126">名称</td>
+          <td width="411"><input type="text" name="prodName" /></td>
+          <td width="126">型号</td>
+          <td width="442"><input type="text" name="prodType" /></td>
+        </tr>
+        <tr>
+          <td>等级</td>
+          <td><input type="text" name="prodBatch" /></td>
+          <td>单位</td>
+          <td><input type="text" name="prodUnit" /></td>
+        </tr>
+        <tr>
+         <td>单价</td>
+          <td><input type="text" name="prodPrice" /></td>
+          <td>备注</td>
+          <td><input type="text" name="prodMemo" /></td>
+        </tr>
+      </table>
+      <div>
+       <input type="submit" value="save" />
+       </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+	
+	
+		$("form").validate({
+			submitHandler:function(){
+				$.ajax({
+					type:"post",
+					url:"/crm/saveproduct.do",
+					data:$("form").serialize(),
+					dataType:"json",
+					success:function(data){
+						if(data.code == 1){
+							window.location.href = "product.html";
+						}else{
+							alert(data.info);
+						}
+					},
+					error:function(data){
+						alert("ajax runtime mistakes");
+					}
+				})
+			},
+			rules:{
+				prodName:"required",
+				prodBatch:"required",
+				prodType:"required",
+				prodUnit:"required",
+				prodPrice:"required",
+				prodMemo:"required",
+			},
+			messages:{
+				prodName:"The information cannot be empty",
+				prodBatch:"The information cannot be empty",
+				prodType:"The information cannot be empty",
+				prodUnit:"The information cannot be empty",
+				prodPrice:"The information cannot be empty",
+				prodMemo:"The information cannot be empty",
+			}
+		})
+	
+	
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>客户开发计划</title>
+<link href="../css/stylesheet.css" rel="stylesheet" type="text/css" />
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/javascript.js"></script>
+<script type="text/javascript" src="../js/jquery-1.12.2.min.js"></script>
+</head>
+
+<body>
+<div style="padding:5px;">
+  <div class="txt" style="padding-top:3px;" >当前位置：系统管理&nbsp;&gt;&nbsp;用户管理<!-- &nbsp;&gt;&nbsp;<a href="list.html">客户信息</a>&nbsp;&gt;&nbsp;联系人&nbsp;&gt;&nbsp;新建联系人 -->
+    <hr class="hr1" />
+  </div>
+  <div class="operation_button">
+  	<a href="#" title="返回" onclick="back()">返回</a>
+    <a href="#" title="保存" onclick="save('新建联系人','linkman.html')">保存</a>
+  </div>
+  <table  border="0" cellpadding="0" cellspacing="0" class="table_show txt">
+        <tr>
+          <td width="100" align="center">用户编号：</td>
+          <td width="200">KH071202001</td>
+          <td width="100" align="center">客户名称：</td>
+          <td width="200">用户姓名</td>
+        </tr>
+  </table>
+  <div class="out_bg">
+    <div class="in_bg">
+      <table id="tid" border="0" cellpadding="0" cellspacing="0" class="table_input txt">
+        <tr>
+          <td width="126">序号</td>
+          <td width="126">姓名</td>
+          <td width="126">密码</td>
+          <td width="126">角色</td>
+          <td width="126">状态</td>
+        </tr>
+        
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+	$(function(){
+		$.ajax({
+			type:"get",
+			url:"/crm/findAllUser.do",
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					var userlist = data.info;
+					$(userlist).each(function(){
+						var html = '<tr>';
+					    html += '<td width="126">'+ this.userId +'</td>';
+					    html += '   <td width="126">'+ this.userName +'</td>';
+					    html += '   <td width="126">'+ this.userPassword +'</td>';
+					    html += '  <td width="126">'+ this.roleName +'</td>';
+					    if(this.userFlag == 0){
+					    	html += '  <td width="126">未删</td>';
+					    }else{
+					    	html += '  <td width="126">已删</td>';
+					    }
+					   
+					    html += '</tr>';
+					    
+					    $("#tid").append($(html));
+					        
+					})
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax运行错误");
+			}
+			
+		})
+	})
+
+</script>
+
+</body>
+</html>

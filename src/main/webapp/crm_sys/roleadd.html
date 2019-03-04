@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../js/jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+</head>
+<body>
+<form action="" onsubmit="return false">
+
+	在下增加页面<br/>
+	角色<input type="text" name="roleName"/><br/>
+	描述
+	<input type="text" name="roleDesc"/><br/>
+	<input type="submit" value="添加"/>
+</form>
+
+<script type="text/javascript">
+	$("form").validate({
+		submitHandler:function(){
+			$.ajax({
+				type:"get",
+				url:"/crm/addRole.do",
+				data:$("form").serialize(),
+				dataType:"json",
+				success:function(data){
+					if(data.code == 1){
+						window.location.href = "rolelist.html";
+					}else{
+						alert(data.info);
+					}
+				},error:function(data){
+					alert("ajax运行错误");
+				}
+			})
+		}
+	})
+</script>
+</body>
+</html>

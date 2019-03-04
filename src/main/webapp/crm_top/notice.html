@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../js/jquery-1.12.2.min.js"></script>
+<style type="text/css">
+	table {
+	width: 800px;
+	
+}
+
+
+</style>
+</head>
+<body>
+<div>
+	欢迎<span id="userId"><strong></strong></span><br/>
+</div>
+
+<table border="1">
+	<thead>
+		<tr>
+		
+			<td>编号</td>
+			<td>所属用户编号</td>
+			<td>主题</td>
+			<td>创建日期</td>
+			<td>状态</td>
+			<td>操作</td>
+		</tr>
+	
+	</thead>
+	<tbody id="tid">
+	
+	</tbody>
+	
+</table>
+<button onclick="addNotice()">+</button>
+
+<script type="text/javascript">
+
+	$(function(){
+		$.ajax({
+			type:"post",
+			url:"/crm/noticelist.do",
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					var user = data.info.user;
+					var list = data.info.list;
+					
+					$("#userId").text(user.userName);
+					
+					$(list).each(function(){
+						
+						var html = '<tr>';
+						
+						html +='<td>'+ this.notId +'</td>';
+						html +='<td>'+ this.notUserId +'</td>';
+						html +='<td>'+ this.notParam +'</td>';
+						html +='<td>'+ this.notCreatedate +'</td>';
+						html +='<td>'+ this.notFlag +'</td>';
+						html +='<td><button onclick="deleteNotice('+ this.notId +')">删除</button></td>';
+						html +='</tr>';
+							
+					$("#tid").append($(html));		
+							
+							
+					})
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax runtime error");
+			}
+		})
+	})
+</script>
+<script type="text/javascript">
+	function addNotice(){
+		window.location.href = "notice_add.html";
+	}
+
+</script>
+
+<script type="text/javascript">
+	function deleteNotice(id){
+		$.ajax({
+			type:"post",
+			url:"/crm/deleteNotice.do?notId=" + id,
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					window.location.reload();
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax runtime error");
+			}
+		})
+	}
+
+</script>
+</body>
+</html>

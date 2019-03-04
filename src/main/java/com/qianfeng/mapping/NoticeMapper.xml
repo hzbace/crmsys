@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.dao.NoticeMapper">
+  <resultMap id="BaseResultMap" type="com.qianfeng.pojo.Notice">
+    <id column="not_id" jdbcType="INTEGER" property="notId" />
+    <result column="not_user_id" jdbcType="INTEGER" property="notUserId" />
+    <result column="not_param" jdbcType="VARCHAR" property="notParam" />
+    <result column="not_createdate" jdbcType="DATE" property="notCreatedate" />
+    <result column="not_flag" jdbcType="TINYINT" property="notFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    not_id, not_user_id, not_param, not_createdate, not_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from notice
+    where not_id = #{notId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from notice
+    where not_id = #{notId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.qianfeng.pojo.Notice">
+    insert into notice (not_id, not_user_id, not_param, 
+      not_createdate, not_flag)
+    values (#{notId,jdbcType=INTEGER}, #{notUserId,jdbcType=INTEGER}, #{notParam,jdbcType=VARCHAR}, 
+      #{notCreatedate,jdbcType=DATE}, #{notFlag,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qianfeng.pojo.Notice">
+    insert into notice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="notId != null">
+        not_id,
+      </if>
+      <if test="notUserId != null">
+        not_user_id,
+      </if>
+      <if test="notParam != null">
+        not_param,
+      </if>
+      <if test="notCreatedate != null">
+        not_createdate,
+      </if>
+      <if test="notFlag != null">
+        not_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="notId != null">
+        #{notId,jdbcType=INTEGER},
+      </if>
+      <if test="notUserId != null">
+        #{notUserId,jdbcType=INTEGER},
+      </if>
+      <if test="notParam != null">
+        #{notParam,jdbcType=VARCHAR},
+      </if>
+      <if test="notCreatedate != null">
+        #{notCreatedate,jdbcType=DATE},
+      </if>
+      <if test="notFlag != null">
+        #{notFlag,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qianfeng.pojo.Notice">
+    update notice
+    <set>
+      <if test="notUserId != null">
+        not_user_id = #{notUserId,jdbcType=INTEGER},
+      </if>
+      <if test="notParam != null">
+        not_param = #{notParam,jdbcType=VARCHAR},
+      </if>
+      <if test="notCreatedate != null">
+        not_createdate = #{notCreatedate,jdbcType=DATE},
+      </if>
+      <if test="notFlag != null">
+        not_flag = #{notFlag,jdbcType=TINYINT},
+      </if>
+    </set>
+    where not_id = #{notId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qianfeng.pojo.Notice">
+    update notice
+    set not_user_id = #{notUserId,jdbcType=INTEGER},
+      not_param = #{notParam,jdbcType=VARCHAR},
+      not_createdate = #{notCreatedate,jdbcType=DATE},
+      not_flag = #{notFlag,jdbcType=TINYINT}
+    where not_id = #{notId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAllNotice" resultMap="BaseResultMap">
+  	select * from notice
+  </select>
+  
+  <select id="findAllNotice2" parameterType="int" resultMap="BaseResultMap">
+  	select * from notice where not_user_id=#{userId}
+  </select>
+</mapper>

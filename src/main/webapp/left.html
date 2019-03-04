@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CRM_Left</title>
+<link rel="stylesheet" href="css/stylesheet.css" type="text/css"  />
+<link rel="stylesheet" href="css/sidebar.css" type="text/css"  />
+<script type="text/javascript" src="js/javascript.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="js/simpla.jquery.configuration.js"></script>
+</head>
+<body>
+<div>
+  <div id="loader"><img src="images/1d_2.gif"/></div>
+  <div class="current_user attention">
+    <div> 欢迎您， <span class="username">Mr.Shi</span><br /> 
+      <span class="rolename"><strong>系统管理员</strong></span><a href="#">退出</a> </div>
+  </div>
+  <div id="sidebar">
+    <div id="sidebar-wrapper">
+      <ul id="main-nav">
+       <!--  <li> <a href="#" class="nav-top-item current" id="man_nav_1" onclick="list_sub_nav(id)"> 营销管理 </a>
+          <ul>
+            <li><a href="crm_sale/opp/list.html" target="rightFrame" id="a_nav_1" onclick="a_sub_nav(id)">销售机会管理</a></li>
+            <li><a href="crm_sale/dev/list.html" target="rightFrame" id="a_nav_2" onclick="a_sub_nav(id)">客户开发计划</a></li>
+          </ul>
+        </li>
+        <li> <a href="#" class="nav-top-item" id="man_nav_2" onclick="list_sub_nav(id)"> 客户管理 </a>
+          <ul>
+            <li><a href="crm_cus/info/list.html" target="rightFrame" id="a_nav_3" onclick="a_sub_nav(id)">客户信息管理</a></li>
+            <li><a href="crm_cus/lose/list.html" target="rightFrame" id="a_nav_4" onclick="a_sub_nav(id)">客户流失管理</a></li>
+          </ul>
+        </li>
+        <li> <a href="#" class="nav-top-item" id="man_nav_3" onclick="list_sub_nav(id)"> 服务管理 </a>
+          <ul>
+            <li><a href="crm_service/add.html" target="rightFrame" id="a_nav_5" onclick="a_sub_nav(id)">服务创建</a></li>
+            <li><a href="crm_service/dispatch.html" target="rightFrame" id="a_nav_6" onclick="a_sub_nav(id)">服务分配</a></li>
+            <li><a href="crm_service/deal_list.html" target="rightFrame" id="a_nav_7" onclick="a_sub_nav(id)">服务处理</a></li>
+            <li><a href="crm_service/feedback_list.html" target="rightFrame" id="a_nav_8" onclick="a_sub_nav(id)">服务反馈</a></li>
+            <li><a href="crm_service/file_list.html" target="rightFrame" id="a_nav_9" onclick="a_sub_nav(id)">服务归档</a></li>
+          </ul>
+        </li>
+        <li> <a href="#" class="nav-top-item" id="man_nav_4" onclick="list_sub_nav(id)"> 统计报表 </a>
+          <ul>
+            <li><a href="crm_rep/contribution.html" target="rightFrame" id="a_nav_10" onclick="a_sub_nav(id)">客户贡献分析</a></li>
+            <li><a href="crm_rep/constitute.html" target="rightFrame" id="a_nav_11" onclick="a_sub_nav(id)">客户构成分析</a></li>
+            <li><a href="crm_rep/service.html" target="rightFrame" id="a_nav_12" onclick="a_sub_nav(id)">客户服务分析</a></li>
+            <li><a href="crm_rep/lose.html" target="rightFrame" id="a_nav_13" onclick="a_sub_nav(id)">客户流失分析</a></li>
+          </ul>
+        </li>
+        <li> <a href="#" class="nav-top-item" id="man_nav_5" onclick="list_sub_nav(id)"> 基础数据 </a>
+          <ul>
+            <li><a href="crm_base/dict.html" target="rightFrame" id="a_nav_14" onclick="a_sub_nav(id)">数据字典管理</a></li>
+            <li><a href="crm_base/product.html" target="rightFrame" id="a_nav_15" onclick="a_sub_nav(id)">查询产品信息</a></li>
+            <li><a href="crm_base/stock.html" target="rightFrame" id="a_nav_16" onclick="a_sub_nav(id)">查询库存</a></li>
+          </ul>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+	$(function(){
+		$.ajax({
+			type:"get",
+			url:"/crm/findMenu.do",
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					var list = data.info.list;
+					var user = data.info.user;
+					
+					$(".username").text(user.userName);
+					if(user.userRoleId == 1){
+						$(".rolename").text("销售主管");
+					}else if(user.userRoleId == 2){
+						$(".rolename").text("客户经理");
+					}else if(user.userRoleId == 4){
+						$(".rolename").text("BOSS");
+					}else if(user.userRoleId == 5){
+						$(".rolename").text("系统管理员");
+					}
+					
+					
+					
+					
+					$(list).each(function(index){
+						var html = '<li> <a href="#" class="nav-top-item current" id="man_nav_'+ (index + 1) +'" onclick="list_sub_nav(id)"> ' + this.pMenuName + ' </a>';
+						html += ' <ul>';
+						var rights = this.cMenuList;
+						$(rights).each(function(index){
+							
+							html += '<li><a href="'+ this.rightUrl +'" target="rightFrame" id="a_nav_'+ (index + 1) +'" onclick="a_sub_nav(id)">' + this.rightName + '</a></li>';
+						})
+						
+						
+				        html += ' </ul>';
+				        html += ' </li>';
+				        $("#main-nav").append($(html));
+					})
+					
+					
+					$("#main-nav li ul").hide(); // Hide all sub menus
+					$("#main-nav li a.current").parent().find("ul").slideToggle("slow"); // Slide down the current menu item's sub menu
+					$("#main-nav li a.nav-top-item").click( // When a top menu item is clicked...
+						function () {
+							$(this).parent().siblings().find("ul").slideUp("normal"); // Slide up all sub menus except the one clicked
+							$(this).next().slideToggle("normal"); // Slide down the clicked sub menu
+							return false;
+						}
+					);
+					
+					$("#main-nav li a.no-submenu").click( // When a menu item with no sub menu is clicked...
+						function () {
+							window.location.href=(this.href); // Just open the link instead of a sub menu
+							return false;
+						}
+					); 
+
+			    // Sidebar Accordion Menu Hover Effect:
+					$("#main-nav li .nav-top-item").hover(
+						function () {
+							$(this).stop().animate({ paddingRight: "25px" }, 200);
+						}, 
+						function () {
+							$(this).stop().animate({ paddingRight: "15px" });
+						}
+					);
+					
+					
+					
+					
+				}else{
+					alert(data.info);
+				}
+			},
+			error:function(data){
+				alert("ajax运行错误");
+			}
+		})
+	})
+
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>
